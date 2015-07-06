@@ -26,7 +26,7 @@ module Paperclip
 
         def exists?(style_name = default_style)
           if original_filename
-              relative_path = URI::encode path(style_name).gsub(@upyun_domain, '')
+              relative_path = URI::encode style_name.path.gsub(@upyun_domain, '')
               begin
                 true if @resource[relative_path].get.code == 200
               rescue RestClient::ResourceNotFound
@@ -41,7 +41,7 @@ module Paperclip
         def flush_writes #:nodoc:
           @queued_for_write.each do |style_name, file|
             current_path = ''
-            relative_path = URI::encode path(style_name).gsub(@upyun_domain, '')
+            relative_path = URI::encode style_name.path.gsub(@upyun_domain, '')
 
             @resource[relative_path].post file, {'Expect' => '', 'Mkdir' => 'true'}
           end
